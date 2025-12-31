@@ -153,8 +153,6 @@ Prüft:
 - ✅ Schema-Pflichtfelder vorhanden
 - ✅ Rekursive Objekt-Validierung[^1]
 
-**Vollständiges Projekt für GitHub-README bereit!**[^1]
-
 <div align="center">⁂</div>
 
 Diese Bibliotek wurde mit claude erstellt da ich leider keine ahnung habe wie man so etwas macht. Ich bin für ferbesserungen gerne offen.
