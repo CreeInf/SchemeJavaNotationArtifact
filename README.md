@@ -157,5 +157,6 @@ Prüft:
 
 <div align="center">⁂</div>
 
-[^1]: https://ppl-ai-file-upload.s3.amazonaws.com/web/direct-files/attachments/157655707/3c232cf1-9342-488a-bdbc-969807a188da/sjna-library.java
+Diese Bibliotek wurde mit claude erstellt da ich leider keine ahnung habe wie man so etwas macht. Ich bin für ferbesserungen gerne offen.
+
 
