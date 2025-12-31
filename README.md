@@ -1,16 +1,4 @@
-<html lang="de">
-<head>
-  <meta charset="UTF-8">
-  <title>SJNA Library – Dokumentation</title>
-  <style>
-    body { font-family: system-ui, sans-serif; line-height: 1.5; margin: 2rem; }
-    code { background: #f4f4f4; padding: 0.1rem 0.3rem; border-radius: 3px; }
-    pre { background: #f4f4f4; padding: 1rem; border-radius: 5px; overflow-x: auto; }
-    h1, h2, h3 { font-family: system-ui, sans-serif; }
-    ul { margin-left: 1.2rem; }
-  </style>
-</head>
-<body>
+
 
 <h1>SJNA Library – Übersicht</h1>
 <p>
@@ -204,7 +192,5 @@ Das SJNA‑Dateiformat ist eine textbasierte, schemageführte Konfigurationsspra
   <li>Schema‑Verstöße (z.&nbsp;B. ungültige Enum‑Werte oder fehlende Pflicht‑Properties) werden als <code>ValidationError</code> im <code>ValidationResult</code> gesammelt.</li>[1]
 </ul>
 
-</body>
-</html>
 
 [1](https://ppl-ai-file-upload.s3.amazonaws.com/web/direct-files/attachments/157655707/3c232cf1-9342-488a-bdbc-969807a188da/sjna-library.java)
