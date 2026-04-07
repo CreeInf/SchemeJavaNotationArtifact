@@ -85,6 +85,16 @@ public class SJNA {
         }
     }
 
+    public static void insertSchemaFlat(SchemaDefinition schema, Document targetDoc) {
+        if (schema == null) {
+            throw new IllegalArgumentException("Schema not found");
+        }
+        ObjectNode instance = schema.createInstance();
+        for (Map.Entry<String, PropertyNode> entry : instance.getProperties().entrySet()) {
+            targetDoc.addProperty(entry.getKey(), entry.getValue());
+        }
+    }
+
     public static void insertSchemaFlat(Document schemaDoc, String schemaName, Document targetDoc, Map<String, Object> values) {
         SchemaDefinition schema = schemaDoc.getSchema(schemaName);
         if (schema == null) {
@@ -96,5 +106,14 @@ public class SJNA {
         }
     }
 
+    public static void insertSchemaFlat(SchemaDefinition schema, Document targetDoc, Map<String, Object> values) {
+        if (schema == null) {
+            throw new IllegalArgumentException("Schema not found");
+        }
+        ObjectNode instance = schema.createInstance(values);
+        for (Map.Entry<String, PropertyNode> entry : instance.getProperties().entrySet()) {
+            targetDoc.addProperty(entry.getKey(), entry.getValue());
+        }
+    }
 
 }
