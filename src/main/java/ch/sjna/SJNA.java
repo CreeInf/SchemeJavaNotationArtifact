@@ -5,6 +5,7 @@ import ch.sjna.parser.*;
 import ch.sjna.validation.*;
 import java.io.*;
 import java.nio.file.*;
+import java.util.*;
 
 public class SJNA {
     public static Document load(String filePath) throws IOException, ParseException {
@@ -40,5 +41,36 @@ public class SJNA {
 
     public static SJNAConfig asConfig(Document doc) {
         return new SJNAConfig(doc);
+    }
+
+    public static ObjectNode createFromSchema(Document doc, String schemaName) {
+        SchemaDefinition schema = doc.getSchema(schemaName);
+        if (schema == null) {
+            throw new IllegalArgumentException("Schema not found: " + schemaName);
+        }
+        return schema.createInstance();
+    }
+
+    public static ObjectNode createFromSchema(Document doc, String schemaName, Map<String, Object> values) {
+        SchemaDefinition schema = doc.getSchema(schemaName);
+        if (schema == null) {
+            throw new IllegalArgumentException("Schema not found: " + schemaName);
+        }
+        return schema.createInstance(values);
+    }
+
+    public static PropertyNode createPropertyFromSchema(Document doc, String schemaName, String propertyKey,
+            Map<String, Object> values) {
+        ObjectNode obj = createFromSchema(doc, schemaName, values);
+        return new PropertyNode(propertyKey, new ValueNode(obj, ValueNode.ValueType.OBJECT), null);
+    }
+    public static void insertSchema(Document schemaDoc, String schemaName, Document targetDoc, String key, Map<String, Object> values) {
+        SchemaDefinition schema = schemaDoc.getSchema(schemaName);
+        if (schema == null) {
+            throw new IllegalArgumentException("Schema not found: " + schemaName);
+        }
+        ObjectNode instance = schema.createInstance(values);
+        PropertyNode prop = new PropertyNode(key, new ValueNode(instance, ValueNode.ValueType.OBJECT), null);
+        targetDoc.addProperty(key, prop);
     }
 }

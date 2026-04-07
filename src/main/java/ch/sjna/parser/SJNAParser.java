@@ -1,5 +1,6 @@
 package ch.sjna.parser;
 
+
 import ch.sjna.model.*;
 import java.util.*;
 
@@ -129,6 +130,8 @@ public class SJNAParser {
             return new ValueNode(parseString(), ValueNode.ValueType.STRING);
         } else if (c == '{') {
             return new ValueNode(parseObject(), ValueNode.ValueType.OBJECT);
+        } else if (c == '[') {
+            return new ValueNode(parseList(), ValueNode.ValueType.LIST);
         } else if (c == 't' || c == 'f') {
             return new ValueNode(parseBoolean(), ValueNode.ValueType.BOOLEAN);
         } else if (Character.isDigit(c) || c == '-') {
@@ -136,6 +139,27 @@ public class SJNAParser {
         } else {
             return new ValueNode(parseIdentifier(), ValueNode.ValueType.IDENTIFIER);
         }
+    }
+
+    private List<ValueNode> parseList() throws ParseException {
+        consume('[');
+        List<ValueNode> items = new ArrayList<>();
+
+        while (!isAtEnd() && peek() != ']') {
+            skipWhitespaceAndComments();
+            if (peek() == ']') break;
+
+            items.add(parseValue());
+
+            skipWhitespace();
+            if (peek() == ',') {
+                consume(',');
+            }
+            skipWhitespaceAndComments();
+        }
+
+        consume(']');
+        return items;
     }
 
     private ObjectNode parseObject() throws ParseException {
@@ -243,8 +267,8 @@ public class SJNAParser {
     private String parseComment() {
         advance(); // '/'
         advance(); // '/'
-        StringBuilder sb = new StringBuilder();
 
+        StringBuilder sb = new StringBuilder();
         while (!isAtEnd() && peek() != '\n') {
             sb.append(advance());
         }

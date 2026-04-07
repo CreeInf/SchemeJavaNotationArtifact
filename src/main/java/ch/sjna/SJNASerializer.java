@@ -13,21 +13,16 @@ public class SJNASerializer {
         indentLevel = 0;
 
         // Schemas zuerst
-        for (SchemaDefinition schema : doc.getSchemas().values()) {
-            serializeSchema(schema);
+        for (Map.Entry<String, SchemaDefinition> entry : doc.getSchemas().entrySet()) {
+            serializeSchema(entry.getValue());
             sb.append("\n");
         }
 
-
         // Dann Properties
-        boolean first = true;
         for (Map.Entry<String, Node> entry : doc.getRoot().entrySet()) {
             if (entry.getValue() instanceof PropertyNode) {
-                if (!first && sb.length() > 0) {
-                    sb.append("\n");
-                }
                 serializeProperty(entry.getKey(), (PropertyNode) entry.getValue());
-                first = false;
+                sb.append("\n");
             }
         }
 
@@ -35,7 +30,7 @@ public class SJNASerializer {
     }
 
     private void serializeSchema(SchemaDefinition schema) {
-        sb.append("/:schema: ").append(schema.getName()).append("{\n");
+        sb.append("/: schema: ").append(schema.getName()).append(" {\n");
         indentLevel++;
 
         for (SchemaProperty prop : schema.getProperties().values()) {
@@ -48,16 +43,16 @@ public class SJNASerializer {
                 for (int i = 0; i < options.size(); i++) {
                     sb.append('"').append(escapeString(options.get(i))).append('"');
                     if (i < options.size() - 1) {
-                        sb.append(",");
+                        sb.append(", ");
                     }
                 }
                 sb.append(")");
             }
 
-            sb.append(": ");
+            sb.append(":");
 
             if (prop.getDescription() != null && !prop.getDescription().isEmpty()) {
-                sb.append("//").append(prop.getDescription());
+                sb.append(" //").append(prop.getDescription());
             }
 
             sb.append(";\n");
@@ -77,7 +72,7 @@ public class SJNASerializer {
             for (int i = 0; i < options.size(); i++) {
                 sb.append('"').append(escapeString(options.get(i))).append('"');
                 if (i < options.size() - 1) {
-                    sb.append(",");
+                    sb.append(", ");
                 }
             }
             sb.append(")");
@@ -85,7 +80,7 @@ public class SJNASerializer {
 
         sb.append(": ");
         serializeValue(prop.getValue());
-        sb.append(";\n");
+        sb.append(";");
     }
 
     private void serializeValue(ValueNode value) {
@@ -105,7 +100,21 @@ public class SJNASerializer {
             case OBJECT:
                 serializeObject(value.asObject());
                 break;
+            case LIST:
+                serializeList(value.asList());
+                break;
         }
+    }
+
+    private void serializeList(List<ValueNode> items) {
+        sb.append("[");
+        for (int i = 0; i < items.size(); i++) {
+            serializeValue(items.get(i));
+            if (i < items.size() - 1) {
+                sb.append(", ");
+            }
+        }
+        sb.append("]");
     }
 
     private void serializeObject(ObjectNode obj) {
@@ -114,6 +123,7 @@ public class SJNASerializer {
 
         for (Map.Entry<String, PropertyNode> entry : obj.getProperties().entrySet()) {
             serializeProperty(entry.getKey(), entry.getValue());
+            sb.append("\n");
         }
 
         indentLevel--;
@@ -128,7 +138,6 @@ public class SJNASerializer {
     }
 
     private String escapeKey(String key) {
-        // Wenn Key Sonderzeichen enthält, in Anführungszeichen setzen
         if (key.matches("[a-zA-Z_][a-zA-Z0-9_]*")) {
             return key;
         } else {

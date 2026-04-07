@@ -41,6 +41,10 @@ public class Document implements Node {
         return comment;
     }
 
+    public void removeProperty(String key) {
+        root.remove(key);
+    }
+
     @Override
     public void setComment(String comment) {
         this.comment = comment;

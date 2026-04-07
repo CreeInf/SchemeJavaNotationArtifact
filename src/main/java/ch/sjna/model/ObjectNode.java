@@ -32,4 +32,8 @@ public class ObjectNode implements Node {
     public void setComment(String comment) {
         this.comment = comment;
     }
+
+    public void removeProperty(String key) {
+        properties.remove(key);
+    }
 }
