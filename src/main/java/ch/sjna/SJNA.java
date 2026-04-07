@@ -73,4 +73,28 @@ public class SJNA {
         PropertyNode prop = new PropertyNode(key, new ValueNode(instance, ValueNode.ValueType.OBJECT), null);
         targetDoc.addProperty(key, prop);
     }
+
+    public static void insertSchemaFlat(Document schemaDoc, String schemaName, Document targetDoc) {
+        SchemaDefinition schema = schemaDoc.getSchema(schemaName);
+        if (schema == null) {
+            throw new IllegalArgumentException("Schema not found: " + schemaName);
+        }
+        ObjectNode instance = schema.createInstance();
+        for (Map.Entry<String, PropertyNode> entry : instance.getProperties().entrySet()) {
+            targetDoc.addProperty(entry.getKey(), entry.getValue());
+        }
+    }
+
+    public static void insertSchemaFlat(Document schemaDoc, String schemaName, Document targetDoc, Map<String, Object> values) {
+        SchemaDefinition schema = schemaDoc.getSchema(schemaName);
+        if (schema == null) {
+            throw new IllegalArgumentException("Schema not found: " + schemaName);
+        }
+        ObjectNode instance = schema.createInstance(values);
+        for (Map.Entry<String, PropertyNode> entry : instance.getProperties().entrySet()) {
+            targetDoc.addProperty(entry.getKey(), entry.getValue());
+        }
+    }
+
+
 }
