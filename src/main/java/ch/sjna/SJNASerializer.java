@@ -12,13 +12,11 @@ public class SJNASerializer {
         sb = new StringBuilder();
         indentLevel = 0;
 
-        // Schemas zuerst
         for (Map.Entry<String, SchemaDefinition> entry : doc.getSchemas().entrySet()) {
             serializeSchema(entry.getValue());
             sb.append("\n");
         }
 
-        // Dann Properties
         for (Map.Entry<String, Node> entry : doc.getRoot().entrySet()) {
             if (entry.getValue() instanceof PropertyNode) {
                 serializeProperty(entry.getKey(), (PropertyNode) entry.getValue());
@@ -84,6 +82,9 @@ public class SJNASerializer {
     }
 
     private void serializeValue(ValueNode value) {
+        if (value.getValue() == null) {
+            return;
+        }
         switch (value.getValueType()) {
             case STRING:
                 sb.append('"').append(escapeString(value.asString())).append('"');

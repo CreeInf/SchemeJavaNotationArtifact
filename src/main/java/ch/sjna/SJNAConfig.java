@@ -15,7 +15,9 @@ public class SJNAConfig {
     public String getString(String path) {
         Node node = navigate(path);
         if (node instanceof PropertyNode) {
-            return ((PropertyNode) node).getValue().asString();
+            ValueNode value = ((PropertyNode) node).getValue();
+            if (value.getValue() == null) return null;
+            return value.asString();
         }
         throw new IllegalArgumentException("Path does not point to a string value: " + path);
     }
@@ -31,7 +33,9 @@ public class SJNAConfig {
     public Number getNumber(String path) {
         Node node = navigate(path);
         if (node instanceof PropertyNode) {
-            return ((PropertyNode) node).getValue().asNumber();
+            ValueNode value = ((PropertyNode) node).getValue();
+            if (value.getValue() == null) return null;
+            return value.asNumber();
         }
         throw new IllegalArgumentException("Path does not point to a number value: " + path);
     }
@@ -45,7 +49,9 @@ public class SJNAConfig {
     }
 
     public Integer getInt(String path) {
-        return getNumber(path).intValue();
+        Number n = getNumber(path);
+        if (n == null) return null;
+        return n.intValue();
     }
 
     public Integer getInt(String path, Integer defaultValue) {
@@ -57,7 +63,9 @@ public class SJNAConfig {
     }
 
     public Long getLong(String path) {
-        return getNumber(path).longValue();
+        Number n = getNumber(path);
+        if (n == null) return null;
+        return n.longValue();
     }
 
     public Long getLong(String path, Long defaultValue) {
@@ -69,7 +77,9 @@ public class SJNAConfig {
     }
 
     public Double getDouble(String path) {
-        return getNumber(path).doubleValue();
+        Number n = getNumber(path);
+        if (n == null) return null;
+        return n.doubleValue();
     }
 
     public Double getDouble(String path, Double defaultValue) {
@@ -83,7 +93,9 @@ public class SJNAConfig {
     public Boolean getBoolean(String path) {
         Node node = navigate(path);
         if (node instanceof PropertyNode) {
-            return ((PropertyNode) node).getValue().asBoolean();
+            ValueNode value = ((PropertyNode) node).getValue();
+            if (value.getValue() == null) return null;
+            return value.asBoolean();
         }
         throw new IllegalArgumentException("Path does not point to a boolean value: " + path);
     }
@@ -99,7 +111,9 @@ public class SJNAConfig {
     public ObjectNode getObject(String path) {
         Node node = navigate(path);
         if (node instanceof PropertyNode) {
-            return ((PropertyNode) node).getValue().asObject();
+            ValueNode value = ((PropertyNode) node).getValue();
+            if (value.getValue() == null) return null;
+            return value.asObject();
         }
         throw new IllegalArgumentException("Path does not point to an object: " + path);
     }
@@ -108,6 +122,7 @@ public class SJNAConfig {
         Node node = navigate(path);
         if (node instanceof PropertyNode) {
             PropertyNode prop = (PropertyNode) node;
+            if (prop.getValue().getValue() == null) return null;
             if (prop.getValue().getValueType() == ValueNode.ValueType.LIST) {
                 List<ValueNode> list = prop.getValue().asList();
                 List<String> result = new ArrayList<>();
@@ -124,6 +139,7 @@ public class SJNAConfig {
         Node node = navigate(path);
         if (node instanceof PropertyNode) {
             PropertyNode prop = (PropertyNode) node;
+            if (prop.getValue().getValue() == null) return null;
             if (prop.getValue().getValueType() == ValueNode.ValueType.LIST) {
                 List<ValueNode> list = prop.getValue().asList();
                 List<Number> result = new ArrayList<>();
@@ -138,6 +154,7 @@ public class SJNAConfig {
 
     public List<Integer> getIntList(String path) {
         List<Number> numbers = getNumberList(path);
+        if (numbers == null) return null;
         List<Integer> result = new ArrayList<>();
         for (Number n : numbers) {
             result.add(n.intValue());
@@ -149,6 +166,7 @@ public class SJNAConfig {
         Node node = navigate(path);
         if (node instanceof PropertyNode) {
             PropertyNode prop = (PropertyNode) node;
+            if (prop.getValue().getValue() == null) return null;
             if (prop.getValue().getValueType() == ValueNode.ValueType.LIST) {
                 List<ValueNode> list = prop.getValue().asList();
                 List<Map<String, Object>> result = new ArrayList<>();
@@ -174,6 +192,7 @@ public class SJNAConfig {
 
     public Map<String, Object> getAsMap(String path) {
         ObjectNode obj = getObject(path);
+        if (obj == null) return null;
         return convertObjectToMap(obj);
     }
 
@@ -198,6 +217,7 @@ public class SJNAConfig {
         }
         try {
             ObjectNode obj = getObject(path);
+            if (obj == null) return new ArrayList<>();
             return new ArrayList<>(obj.getProperties().keySet());
         } catch (IllegalArgumentException e) {
             return new ArrayList<>();
@@ -210,7 +230,8 @@ public class SJNAConfig {
             for (Map.Entry<String, Node> entry : document.getRoot().entrySet()) {
                 if (entry.getValue() instanceof PropertyNode) {
                     PropertyNode prop = (PropertyNode) entry.getValue();
-                    if (prop.getValue().getValueType() == ValueNode.ValueType.OBJECT) {
+                    if (prop.getValue().getValue() != null &&
+                            prop.getValue().getValueType() == ValueNode.ValueType.OBJECT) {
                         objects.add(prop.getValue().asObject());
                     }
                 }
@@ -218,8 +239,10 @@ public class SJNAConfig {
         } else {
             try {
                 ObjectNode parentObj = getObject(path);
+                if (parentObj == null) return objects;
                 for (PropertyNode prop : parentObj.getProperties().values()) {
-                    if (prop.getValue().getValueType() == ValueNode.ValueType.OBJECT) {
+                    if (prop.getValue().getValue() != null &&
+                            prop.getValue().getValueType() == ValueNode.ValueType.OBJECT) {
                         objects.add(prop.getValue().asObject());
                     }
                 }
@@ -244,7 +267,8 @@ public class SJNAConfig {
             for (Map.Entry<String, Node> entry : document.getRoot().entrySet()) {
                 if (entry.getValue() instanceof PropertyNode) {
                     PropertyNode prop = (PropertyNode) entry.getValue();
-                    if (prop.getValue().getValueType() == ValueNode.ValueType.OBJECT) {
+                    if (prop.getValue().getValue() != null &&
+                            prop.getValue().getValueType() == ValueNode.ValueType.OBJECT) {
                         result.put(entry.getKey(), prop.getValue().asObject());
                     }
                 }
@@ -252,8 +276,10 @@ public class SJNAConfig {
         } else {
             try {
                 ObjectNode parentObj = getObject(path);
+                if (parentObj == null) return result;
                 for (Map.Entry<String, PropertyNode> entry : parentObj.getProperties().entrySet()) {
-                    if (entry.getValue().getValue().getValueType() == ValueNode.ValueType.OBJECT) {
+                    if (entry.getValue().getValue().getValue() != null &&
+                            entry.getValue().getValue().getValueType() == ValueNode.ValueType.OBJECT) {
                         result.put(entry.getKey(), entry.getValue().getValue().asObject());
                     }
                 }
@@ -311,22 +337,17 @@ public class SJNAConfig {
         setValue(path, new ValueNode(obj, ValueNode.ValueType.OBJECT), null);
     }
 
-    // Setzt einen Wert – erstellt ihn wenn er nicht existiert, überschreibt ihn wenn er existiert
     private void setValue(String path, ValueNode valueNode, EnumDefinition enumDef) {
         String[] parts = path.split("\\.");
 
         if (parts.length == 1) {
-            // Root-Ebene
             PropertyNode existing = getExistingProperty(path);
             if (existing != null) {
-                // Überschreiben – neuen PropertyNode erstellen
                 document.addProperty(parts[0], new PropertyNode(parts[0], valueNode, enumDef != null ? enumDef : existing.getEnumDefinition()));
             } else {
-                // Neu erstellen
                 document.addProperty(parts[0], new PropertyNode(parts[0], valueNode, enumDef));
             }
         } else {
-            // Verschachtelt – zum Parent navigieren
             String parentPath = String.join(".", Arrays.copyOfRange(parts, 0, parts.length - 1));
             String lastKey = parts[parts.length - 1];
             ObjectNode parent = getObject(parentPath);
@@ -426,6 +447,7 @@ public class SJNAConfig {
     }
 
     private Object convertValueToObject(ValueNode value) {
+        if (value.getValue() == null) return null;
         switch (value.getValueType()) {
             case STRING:
             case IDENTIFIER:

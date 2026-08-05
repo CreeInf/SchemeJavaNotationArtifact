@@ -1,6 +1,5 @@
 package ch.sjna.parser;
 
-
 import ch.sjna.model.*;
 import java.util.*;
 
@@ -126,7 +125,9 @@ public class SJNAParser {
         skipWhitespace();
         char c = peek();
 
-        if (c == '"') {
+        if (c == ';' || c == '\0') {
+            return new ValueNode(null, ValueNode.ValueType.IDENTIFIER);
+        } else if (c == '"') {
             return new ValueNode(parseString(), ValueNode.ValueType.STRING);
         } else if (c == '{') {
             return new ValueNode(parseObject(), ValueNode.ValueType.OBJECT);
@@ -265,8 +266,8 @@ public class SJNAParser {
     }
 
     private String parseComment() {
-        advance(); // '/'
-        advance(); // '/'
+        advance();
+        advance();
 
         StringBuilder sb = new StringBuilder();
         while (!isAtEnd() && peek() != '\n') {

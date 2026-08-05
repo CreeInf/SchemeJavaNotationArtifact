@@ -26,23 +26,27 @@ public class ValueNode implements Node {
     }
 
     public String asString() {
+        if (value == null) return null;
         return value.toString();
     }
 
     public Number asNumber() {
+        if (value == null) return null;
         return (Number) value;
     }
 
     public Boolean asBoolean() {
+        if (value == null) return null;
         return (Boolean) value;
     }
 
     public ObjectNode asObject() {
+        if (value == null) return null;
         return (ObjectNode) value;
     }
 
-    @SuppressWarnings("unchecked")
     public List<ValueNode> asList() {
+        if (value == null) return null;
         return (List<ValueNode>) value;
     }
 
