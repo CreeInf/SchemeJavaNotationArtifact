@@ -1,4 +1,4 @@
-package ch.sjna.parser;
+package ch.sjna.claude.parser;
 
 public class ParseException extends Exception {
     public ParseException(String message) {

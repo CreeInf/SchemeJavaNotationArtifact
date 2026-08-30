@@ -217,11 +217,7 @@ Alternativ können die Quelldateien direkt in das eigene Projekt kopiert werden.
 ### Imports
 
 ```java
-import ch.sjna.SJNA;
-import ch.sjna.SJNAConfig;
-import ch.sjna.model.*;
-import ch.sjna.parser.ParseException;
-import ch.sjna.validation.*;
+
 ```
 
 ---

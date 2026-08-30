@@ -1,6 +1,7 @@
-package ch.sjna.validation;
+package ch.sjna.claude.validation;
 
-import ch.sjna.model.*;
+import ch.sjna.claude.model.*;
+
 import java.util.*;
 
 public class Validator {

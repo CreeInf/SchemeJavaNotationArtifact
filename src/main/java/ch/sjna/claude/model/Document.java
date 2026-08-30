@@ -1,4 +1,4 @@
-package ch.sjna.model;
+package ch.sjna.claude.model;
 
 import java.util.*;
 

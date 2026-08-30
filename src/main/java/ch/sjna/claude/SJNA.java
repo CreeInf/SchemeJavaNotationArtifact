@@ -1,8 +1,11 @@
-package ch.sjna;
+package ch.sjna.claude;
 
-import ch.sjna.model.*;
-import ch.sjna.parser.*;
-import ch.sjna.validation.*;
+import ch.sjna.claude.model.*;
+import ch.sjna.claude.parser.ParseException;
+import ch.sjna.claude.parser.SJNAParser;
+import ch.sjna.claude.validation.ValidationResult;
+import ch.sjna.claude.validation.Validator;
+
 import java.io.*;
 import java.nio.file.*;
 import java.util.*;
@@ -60,7 +63,7 @@ public class SJNA {
     }
 
     public static PropertyNode createPropertyFromSchema(Document doc, String schemaName, String propertyKey,
-            Map<String, Object> values) {
+                                                        Map<String, Object> values) {
         ObjectNode obj = createFromSchema(doc, schemaName, values);
         return new PropertyNode(propertyKey, new ValueNode(obj, ValueNode.ValueType.OBJECT), null);
     }

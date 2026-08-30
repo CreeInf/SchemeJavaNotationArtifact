@@ -1,6 +1,7 @@
-package ch.sjna.parser;
+package ch.sjna.claude.parser;
 
-import ch.sjna.model.*;
+import ch.sjna.claude.model.*;
+
 import java.util.*;
 
 public class SJNAParser {

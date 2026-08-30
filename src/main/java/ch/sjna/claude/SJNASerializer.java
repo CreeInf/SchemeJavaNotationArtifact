@@ -1,6 +1,7 @@
-package ch.sjna;
+package ch.sjna.claude;
 
-import ch.sjna.model.*;
+import ch.sjna.claude.model.*;
+
 import java.util.*;
 
 public class SJNASerializer {

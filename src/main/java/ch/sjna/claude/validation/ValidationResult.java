@@ -1,4 +1,4 @@
-package ch.sjna.validation;
+package ch.sjna.claude.validation;
 
 import java.util.*;
 

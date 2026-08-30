@@ -1,4 +1,4 @@
-package ch.sjna.model;
+package ch.sjna.claude.model;
 
 public interface Node {
     NodeType getType();

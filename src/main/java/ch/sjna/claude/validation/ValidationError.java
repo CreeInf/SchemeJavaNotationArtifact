@@ -1,4 +1,4 @@
-package ch.sjna.validation;
+package ch.sjna.claude.validation;
 
 public class ValidationError {
     private final String message;
